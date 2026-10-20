@@ -23,7 +23,7 @@ test/
   dispute.test.ts             — σ6/σ8, construtor, balance delta check, prazos
   experimental/clonable.test.ts — correção funcional e gás da fábrica de clones
   experimental/clonableConformidade.test.ts — matriz δ, transições, acesso,
-                                reentrância e S1 sobre o clone (68 testes)
+                                reentrância e S1 sobre o clone (70 testes)
 scripts/
   medirGasReal.ts             — gás por recibo (receipt.gasUsed), não por
                                 média do gas-reporter, inclusive sobre o clone
@@ -44,6 +44,6 @@ npx hardhat run scripts/medirGasReal.ts   # gás real por recibo, cenário a cen
 OWLRACLE_API_KEY=... python gas.py        # P_gas (a chave nunca vai para o repositório)
 ```
 
-## Divergência de capítulos
+## Correspondência com a dissertação
 
-Este código segue o Capítulo 3 (8 estados, sem `CONCLUIDO_ARBITRAGEM`), conforme a Seção "Pré-requisito" do roteiro. O Capítulo 2 ainda precisa ser atualizado para não descrever um autômato diferente do implementado.
+Este código segue o Capítulo 3 da dissertação (8 estados, 8 eventos, sem `CONCLUIDO_ARBITRAGEM`); os desfechos da arbitragem são registrados por eventos, e não por estados adicionais.

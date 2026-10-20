@@ -1,0 +1,153 @@
+diff --git a/README.md b/README.md
+index b7a96b2..4753a51 100644
+--- a/README.md
++++ b/README.md
+@@ -23,7 +23,7 @@ test/
+   dispute.test.ts             — σ6/σ8, construtor, balance delta check, prazos
+   experimental/clonable.test.ts — correção funcional e gás da fábrica de clones
+   experimental/clonableConformidade.test.ts — matriz δ, transições, acesso,
+-                                reentrância e S1 sobre o clone (68 testes)
++                                reentrância e S1 sobre o clone (70 testes)
+ scripts/
+   medirGasReal.ts             — gás por recibo (receipt.gasUsed), não por
+                                 média do gas-reporter, inclusive sobre o clone
+@@ -44,6 +44,6 @@ npx hardhat run scripts/medirGasReal.ts   # gás real por recibo, cenário a cen
+ OWLRACLE_API_KEY=... python gas.py        # P_gas (a chave nunca vai para o repositório)
+ ```
+ 
+-## Divergência de capítulos
++## Correspondência com a dissertação
+ 
+-Este código segue o Capítulo 3 (8 estados, sem `CONCLUIDO_ARBITRAGEM`), conforme a Seção "Pré-requisito" do roteiro. O Capítulo 2 ainda precisa ser atualizado para não descrever um autômato diferente do implementado.
++Este código segue o Capítulo 3 da dissertação (8 estados, 8 eventos, sem `CONCLUIDO_ARBITRAGEM`); os desfechos da arbitragem são registrados por eventos, e não por estados adicionais.
+diff --git a/RELATORIO_EXPERIMENTOS.md b/RELATORIO_EXPERIMENTOS.md
+index 9c677ba..5a1ad0b 100644
+--- a/RELATORIO_EXPERIMENTOS.md
++++ b/RELATORIO_EXPERIMENTOS.md
+@@ -2,7 +2,7 @@
+ 
+ > Consolidação dos 4 critérios de sucesso (Seção "Fase D" do roteiro). Este relatório acompanha o Capítulo 4 da dissertação; quando houver divergência, o capítulo e o código desta revisão prevalecem sobre versões anteriores deste arquivo.
+ 
+-Execução original: 2026-08-23 (coleta de `P_gas`). Revisões 1 a 3: 2026-10-09. Stack: Solidity 0.8.20 (`viaIR: true`, `optimizer runs: 200`), Hardhat 2.29.1, OpenZeppelin Contracts 5.6.1, Slither 0.11.6.
++Execução original: 2026-08-23 (coleta de `P_gas`). Revisões 1 a 3: 2026-10-09. Revisão 4: 2026-10-20 (cotações de 10/10/2026, as da dissertação). Stack: Solidity 0.8.20 (`viaIR: true`, `optimizer runs: 200`), Hardhat 2.29.1, OpenZeppelin Contracts 5.6.1, Slither 0.11.6.
+ 
+ ---
+ 
+@@ -21,14 +21,20 @@ Execução original: 2026-08-23 (coleta de `P_gas`). Revisões 1 a 3: 2026-10-09
+ 
+ ### Revisão 3
+ 
+-6. **Chave da API exposta.** A chave da Owlracle estava gravada em `gas.py`. O script passou a lê-la de `OWLRACLE_API_KEY`. A chave antiga permanece no histórico do git e deve ser revogada no painel da Owlracle.
+-7. **`P_gas` com duas metodologias.** A versão anterior deste relatório afirmava não haver acesso a dados históricos e tratava 376 Gwei como pico pontual, enquanto `gas.py` calcula a mediana real de 30 dias (374,86 Gwei em 23/08/2026), que é o valor adotado na dissertação. A Seção 3.2 passa a usar apenas a mediana.
+-8. **Câmbio sem fonte e em data sem cotação oficial.** A coleta de 23/08/2026 caiu em um domingo, sem PTAX. Adota-se a PTAX de venda de 21/08/2026 (último dia útil anterior), R$ 5,1625 (R$ 5,1619 é a taxa de compra do mesmo dia).
+-9. **Variante clonável validada apenas parcialmente.** Acrescentado [test/experimental/clonableConformidade.test.ts](test/experimental/clonableConformidade.test.ts), que aplica ao clone a mesma verificação do contrato principal (68 testes). Cobertura de código de 100% também em `MellowProtocolClonable.sol` e `MellowProtocolCloneFactory.sol`.
++6. **Chave da API exposta.** A chave da Owlracle estava gravada em `gas.py`. O script passou a lê-la de `OWLRACLE_API_KEY`. O histórico do repositório foi reescrito e a chave antiga não consta de nenhum commit publicado; ainda assim, deve ser revogada no painel da Owlracle.
++7. **`P_gas` com duas metodologias.** A versão anterior deste relatório afirmava não haver acesso a dados históricos e tratava 376 Gwei como pico pontual, enquanto `gas.py` calcula a mediana real de 30 dias (374,86 Gwei em 23/08/2026, valor adotado à época). A Seção 3.2 passa a usar apenas a mediana; a revisão 4 a substitui pela janela de 10/10/2026.
++8. **Câmbio sem fonte e em data sem cotação oficial.** A coleta de 23/08/2026 caiu em um domingo, sem PTAX. Adotou-se a PTAX de venda de 21/08/2026 (último dia útil anterior), R$ 5,1625 (R$ 5,1619 é a taxa de compra do mesmo dia), substituída na revisão 4.
++9. **Variante clonável validada apenas parcialmente.** Acrescentado [test/experimental/clonableConformidade.test.ts](test/experimental/clonableConformidade.test.ts), que aplica ao clone a mesma verificação do contrato principal (70 testes). Cobertura de código de 100% também em `MellowProtocolClonable.sol` e `MellowProtocolCloneFactory.sol`.
+ 10. **Inconsistências internas deste relatório.** Contagem do Slither (12 → 7 → 8), gás de σ6 (75 637, e não a média 75 647), referências a números de linha (substituídas por nomes de função) e menção a "~91% citados na dissertação" (valor que não consta dos capítulos) corrigidas.
+ 
+ 11. **Custo incompleto e evidências curtas.** O `approve` obrigatório antes de σ2 (45 945) não era medido, e as evidências de σ4 e σ6 eram identificadores curtos. Com CIDv1 de 59 caracteres, o ciclo com disputa sobe para 481 728. Ambos passaram a constar de `scripts/medirGasReal.ts`.
+ 
++### Revisão 4
++
++12. **Cotações desatualizadas em relação à dissertação.** A Seção 3.2 ainda convertia o gás com as cotações de agosto (374,86 Gwei, US$ 0,1091 e R$ 5,1625). Passa a usar as do Capítulo 4 da dissertação: mediana de 328,79 Gwei na janela encerrada em 09/10/2026 (resposta arquivada em [scripts/out/owlracle_2026-10-10.json](scripts/out/owlracle_2026-10-10.json)), POL a US$ 0,1020 (CoinGecko, 10/10/2026) e PTAX de venda de R$ 4,9892 (09/10/2026). Os valores de gás não mudaram e foram confirmados pela reexecução de `scripts/medirGasReal.ts` em 20/10/2026.
++13. **Contagem de testes da variante clonável.** O arquivo `clonableConformidade.test.ts` tem 70 testes, e não 68.
++14. **Premissas de vivacidade.** L1 depende de três premissas (H1 a H3), e não de duas: a resposta do árbitro, o acionamento de σ7 e a não reversão das transferências do *token*.
++
+ **Correção de σ2 (out. 2026).** `financiar` passou a gravar o estado antes da transferência e a usar `nonReentrant`, no contrato principal e no clone. Um teste com token que aciona o remetente durante `transferFrom` (`MaliciousERC20`, gatilho no remetente) mostrava que, na versão anterior, uma chamada de σ7 após τ_financ levava o contrato a CANCELADO no meio do depósito, estado sobrescrito por FINANCIADO, com emissão de `ContratoCancelado`. Com a correção, a reentrada é bloqueada. Todas as medições abaixo referem-se à versão corrigida (σ2 passou de 58 265 para 60 575 de gás; as funções com `nonReentrant` subiram 66 de gás cada; a implantação caiu para 1 606 196).
+ 
+ **Teste de propriedade de S1 (out. 2026).** Acrescentado [test/fuzzS1.test.ts](test/fuzzS1.test.ts), descrito na Seção 1.1.
+@@ -45,7 +51,7 @@ O único caminho que credita o contrato, `financiar`, verifica o diferencial de
+ 
+ Os caminhos que debitam o contrato transferem exatamente o saldo custodiado: `aprovarPagamento` e `acionarWatchdog` em ENTREGUE liberam `v` a αp; `executarDecisao(valor)` libera `valor` a αp e `v - valor` a αc. Em todos, o saldo final é 0. O estado é atualizado e o evento emitido antes de `safeTransfer`.
+ 
+-Premissas de instanciação: o construtor (e a fábrica, no clone) impõe `τ_aceite < τ_financ < τ_exec`. As condições `t0 < τ_aceite` e `Δt_insp > 0` **não** são verificadas em código; são premissas declaradas no Capítulo 3 (ver Seção 6).
++Premissas de instanciação: o construtor (e a fábrica, no clone) impõe `τ_aceite < τ_financ < τ_exec`. As condições `t0 < τ_aceite`, `Δt_insp > 0` e `αc ≠ αp` **não** são verificadas em código; são premissas declaradas no Capítulo 3 (ver Seção 6).
+ 
+ ### 1.1 S1 por teste de propriedade (*fuzzing* com semente fixa)
+ 
+@@ -118,7 +124,7 @@ De cada estado não absorvente há ao menos uma transição habilitada:
+ | ENTREGUE | σ5, σ6 ou σ7 (Δt4) |
+ | EM_DISPUTA | σ8 apenas |
+ 
+-Nenhum *watchdog* é definido para EM_DISPUTA, cuja única saída é σ8, acionada pelo módulo de arbitragem. L1 é, portanto, condicional a duas premissas (Capítulo 3): o árbitro responde em tempo finito e σ7 é acionado após cada prazo. A implementação é fiel à matriz δ e não introduz saída adicional.
++Nenhum *watchdog* é definido para EM_DISPUTA, cuja única saída é σ8, acionada pelo módulo de arbitragem. L1 é, portanto, condicional a três premissas (Capítulo 3): o árbitro responde em até T_disp (H1), σ7 é acionado em até ε após cada prazo (H2) e as transferências do *token* às partes não revertem (H3). A implementação é fiel à matriz δ e não introduz saída adicional.
+ 
+ ---
+ 
+@@ -191,29 +197,32 @@ Reproduzir: `npx hardhat run scripts/medirGasReal.ts`.
+ 
+ `C_BRL = G × P_gas × 10⁻⁹ × P_POL × P_USD/BRL`, com:
+ 
+-- `P_gas` = **374,86 Gwei**, mediana dos fechamentos diários dos 30 dias anteriores a 23/08/2026, API de histórico da Owlracle (`gas.py`).
+-- `P_POL` = US$ 0,1091, fechamento diário oficial de 23/08/2026 (candle de 00:00 a 23:59:59 UTC; fechamento US$ 0,10914304) na aba de dados históricos do CoinMarketCap (POL, id 28321), conferido em 10/10/2026. O valor anterior, US$ 0,09, não tinha fonte registrada. A Owlracle não devolve o preço do token.
+-- `P_USD/BRL` = R$ 5,1625, PTAX de venda de 21/08/2026 (último dia útil antes da coleta), conferida pelo autor no Banco Central em 10/10/2026. O valor anterior, R$ 5,1619, era a taxa de compra.
++- `P_gas` = **328,79 Gwei**, mediana dos 30 fechamentos diários entre 10/09/2026 e 09/10/2026, API de histórico da Owlracle (*timeframe* de 1 dia, 30 *candles*), consulta de 10/10/2026. A resposta está arquivada em [scripts/out/owlracle_2026-10-10.json](scripts/out/owlracle_2026-10-10.json), da qual a mediana pode ser recalculada (maior fechamento da janela: 415,79 Gwei).
++- `P_POL` = US$ 0,1020, fechamento de 10/10/2026 nos dados históricos do CoinGecko (datas em UTC). A Owlracle não devolve o preço do token.
++- `P_USD/BRL` = R$ 4,9892, PTAX de venda de 09/10/2026 (último dia útil anterior à consulta), Banco Central do Brasil.
++
++Os valores de agosto (374,86 Gwei, US$ 0,1091 e R$ 5,1625) foram usados até a revisão 3 e não são mais adotados.
+ 
+ | Cenário | Gás | Custo | % do teto (R$ 3,00) |
+ |---|---:|---:|---:|
+-| Nominal | 289 887 | R$ 0,0612 | 2,04% |
+-| Via Δt4 | 293 417 | R$ 0,0619 | 2,06% |
+-| Disputa, pior caso | 391 050 | R$ 0,0826 | 2,75% |
+-| Nominal, CIDv1 | 335 189 | R$ 0,0708 | 2,36% |
+-| Disputa, CIDv1 | 481 728 | R$ 0,1017 | 3,39% |
+-| Implantação + `approve` + nominal, CIDv1 | 1 987 330 | R$ 0,4196 | 13,99% |
+-| Implantação + `approve` + disputa, CIDv1 | 2 133 869 | R$ 0,4505 | 15,02% |
++| Nominal | 289 887 | R$ 0,0485 | 1,62% |
++| Via Δt4 | 293 417 | R$ 0,0491 | 1,64% |
++| Inexecução (σ1 → σ3, σ7 por Δt3, σ8 integral) | 222 459 | R$ 0,0372 | 1,24% |
++| Disputa, pior caso | 391 050 | R$ 0,0654 | 2,18% |
++| Nominal, CIDv1 | 335 189 | R$ 0,0561 | 1,87% |
++| Disputa, CIDv1 | 481 728 | R$ 0,0806 | 2,69% |
++| Implantação + `approve` + nominal, CIDv1 | 1 987 330 | R$ 0,3325 | 11,08% |
++| Implantação + `approve` + disputa, CIDv1 | 2 133 869 | R$ 0,3570 | 11,90% |
+ 
+-Preço do gás que levaria cada caso ao teto, mantidas as cotações: ≈ 2 496 Gwei (implantação + `approve` + disputa com CIDv1, 6,7 × a mediana), ≈ 11 057 Gwei (disputa com CIDv1, 29,5 ×), ≈ 18 374 Gwei (nominal com evidência curta, 49 ×). "Ciclo completo" é a sequência de eventos de Σ de CRIADO a um estado absorvente, com uma evidência por chamada de σ4 e σ6; implantação e `approve` ficam fora de Σ e entram na leitura conservadora. O critério 3 é satisfeito nas duas leituras.
++Preço do gás que levaria cada caso ao teto, mantidas as cotações: ≈ 2 763 Gwei (implantação + `approve` + disputa com CIDv1, 8,4 × a mediana), ≈ 12 237 Gwei (disputa com CIDv1, 37,2 ×), ≈ 20 336 Gwei (nominal com evidência curta, 61,9 ×). Como o gás não depende de `v`, o caso conservador fica abaixo de 1,5% para qualquer serviço a partir de cerca de R$ 24,00. "Ciclo completo" é a sequência de eventos de Σ de CRIADO a um estado absorvente, com uma evidência por chamada de σ4 e σ6; implantação e `approve` ficam fora de Σ e entram na leitura conservadora. O critério 3 é satisfeito nas duas leituras.
+ 
+ ### 3.3 Implantação e padrões de clone
+ 
+ | Padrão | Gás de criação | Criação + ciclo com disputa | Custo por acordo |
+ |---|---:|---:|---:|
+-| `MellowProtocol` completo (CIDv1 de 59 caracteres) | 1 606 196 | 1 997 246 | R$ 0,4217 |
++| `MellowProtocol` completo (CIDv1 de 59 caracteres) | 1 606 196 | 1 997 246 | R$ 0,3342 |
+ | `Clones.clone` sem argumentos (não funcional) | 63 797 | — | — |
+-| `MellowProtocolClonable` via `cloneWithImmutableArgs` | 153 374 | 575 650 | R$ 0,1215 |
++| `MellowProtocolClonable` via `cloneWithImmutableArgs` | 153 374 | 575 650 | R$ 0,0963 |
+ 
+ A implantação completa cresce em degraus de cerca de 22 400 de gás a cada 32 caracteres de `cidSpec` além de 31 (medido de 11 a 128 caracteres). O clone funcional reduz a criação em 90,5%, mas decodifica P a cada chamada (ciclo nominal +15,0%, ciclo com disputa +8,0%); por acordo, a economia é de 71,2%.
+ 
+@@ -243,9 +252,9 @@ A primeira execução apontou 12 achados. Cinco foram corrigidos: `missing-zero-
+ 
+ | # | Condição | Status |
+ |---|---|---|
+-| 1 | S1, S2, L1 verificáveis por inspeção | ✅ L1 condicional às duas premissas do Capítulo 3 |
++| 1 | S1, S2, L1 verificáveis por inspeção | ✅ L1 condicional às premissas H1 a H3 do Capítulo 3 |
+ | 2 | Cobertura ≥ 95% das arestas de δ | ✅ 64/64 células e 100% de código, no contrato principal e no clone |
+-| 3 | Custo do ciclo completo ≤ R$ 3,00 | ✅ R$ 0,1017 no pior ciclo medido (disputa, CIDv1); R$ 0,4505 com implantação e `approve` |
++| 3 | Custo do ciclo completo ≤ R$ 3,00 | ✅ R$ 0,0806 no pior ciclo medido (disputa, CIDv1); R$ 0,3570 com implantação e `approve` |
+ | 4 | Zero alertas Alta/Média no Slither | ✅ 8 achados Baixa/Informacional |
+ 
+ ---
+@@ -260,12 +269,12 @@ A primeira execução apontou 12 achados. Cinco foram corrigidos: `missing-zero-
+ - Slither reexecutado (8 achados).
+ 
+ ### Pendentes do autor
+-- Revogar a chave antiga da Owlracle.
+-- Conferir a PTAX de 21/08/2026 no Banco Central e registrar a fonte de `P_POL`.
+-- Guardar a resposta bruta da Owlracle de 23/08/2026 (a API devolve sempre os 30 dias anteriores à execução).
++- Revogar a chave antiga da Owlracle, se ainda não foi revogada.
++
++As pendências de PTAX, fonte de `P_POL` e arquivamento da resposta da Owlracle foram resolvidas na revisão 4, com as cotações de 10/10/2026 e a resposta arquivada em `scripts/out/`.
+ 
+ ### Limitações declaradas e trabalhos futuros
+-- **Premissas `t0 < τ_aceite` e `Δt_insp > 0`:** mantidas como premissas de instanciação. P é aceito pelo prestador em σ1 e pelo contratante em σ2, e verificá-las em código alteraria o contrato avaliado, exigindo refazer toda a avaliação. Recomendadas como verificação adicional em versão futura.
++- **Premissas `t0 < τ_aceite`, `Δt_insp > 0` e `αc ≠ αp`:** mantidas como premissas de instanciação. P é aceito pelo prestador em σ1 e pelo contratante em σ2, e verificá-las em código alteraria o contrato avaliado, exigindo refazer toda a avaliação. Recomendadas como verificação adicional em versão futura.
+ - **Gás medido em rede local:** pressupõe que a Polygon PoS cobra as mesmas unidades de gás da EVM de referência. Medição em rede de teste pública (Amoy) é trabalho futuro.
+ - **Adoção do clone como implementação de referência:** a variante está validada pela mesma suíte, mas encarece cada chamada e altera o mapeamento de P (de `immutable` para argumentos anexados ao clone) estabelecido na rastreabilidade do Capítulo 3. A migração é trabalho futuro.
+ - **Saída de EM_DISPUTA sem árbitro:** um Δt5 que devolvesse os fundos após prazo de arbitragem tornaria L1 incondicional; trabalho futuro.
