@@ -1,0 +1,446 @@
+[
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 0,
+    "ator": "contratante",
+    "chamada": "implantação",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 0.01,
+    "ator": "contratante",
+    "chamada": "approve (fora de Σ)",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "45945"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 1,
+    "ator": "prestador",
+    "chamada": "aceitar (σ1)",
+    "resultado": "ok",
+    "estado": "ACEITO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ContratoAceito"
+    ],
+    "gas": "44812"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 2,
+    "ator": "contratante",
+    "chamada": "financiar (σ2)",
+    "resultado": "ok",
+    "estado": "FINANCIADO",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ContratoFinanciado"
+    ],
+    "gas": "60575"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 3,
+    "ator": "prestador",
+    "chamada": "iniciarExecucao (σ3)",
+    "resultado": "ok",
+    "estado": "EM_EXECUCAO",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ExecucaoIniciada"
+    ],
+    "gas": "27828"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 10,
+    "ator": "prestador",
+    "chamada": "confirmarEntrega (σ4)",
+    "resultado": "ok",
+    "estado": "ENTREGUE",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "EntregaConfirmada"
+    ],
+    "gas": "98156"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 12,
+    "ator": "contratante",
+    "chamada": "abrirDisputa (σ6)",
+    "resultado": "ok",
+    "estado": "EM_DISPUTA",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "DisputaAberta"
+    ],
+    "gas": "75637"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 13,
+    "ator": "contratante",
+    "chamada": "aprovarPagamento (σ5)",
+    "resultado": "revertida (EstadoInvalido)",
+    "estado": "EM_DISPUTA",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 18,
+    "ator": "terceiro",
+    "chamada": "acionarWatchdog (σ7)",
+    "resultado": "revertida (EstadoInvalido)",
+    "estado": "EM_DISPUTA",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 19,
+    "ator": "terceiro",
+    "chamada": "executarDecisao (σ8)",
+    "resultado": "revertida (NaoAutorizado)",
+    "estado": "EM_DISPUTA",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "A: disputa e decisão parcial",
+    "dia": 20,
+    "ator": "arbitragem",
+    "chamada": "executarDecisao (σ8, 600)",
+    "resultado": "ok",
+    "estado": "CONCLUIDO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "400.0",
+    "saldoPrestador": "600.0",
+    "eventos": [
+      "DisputaResolvida"
+    ],
+    "gas": "84030"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 0,
+    "ator": "contratante",
+    "chamada": "implantação",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 0.01,
+    "ator": "contratante",
+    "chamada": "approve (fora de Σ)",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "45945"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 1,
+    "ator": "prestador",
+    "chamada": "aceitar (σ1)",
+    "resultado": "ok",
+    "estado": "ACEITO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ContratoAceito"
+    ],
+    "gas": "44812"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 2,
+    "ator": "contratante",
+    "chamada": "financiar (σ2)",
+    "resultado": "ok",
+    "estado": "FINANCIADO",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ContratoFinanciado"
+    ],
+    "gas": "60575"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 3,
+    "ator": "prestador",
+    "chamada": "iniciarExecucao (σ3)",
+    "resultado": "ok",
+    "estado": "EM_EXECUCAO",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ExecucaoIniciada"
+    ],
+    "gas": "27828"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 10,
+    "ator": "prestador",
+    "chamada": "confirmarEntrega (σ4)",
+    "resultado": "ok",
+    "estado": "ENTREGUE",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "EntregaConfirmada"
+    ],
+    "gas": "98156"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 14,
+    "ator": "prestador",
+    "chamada": "acionarWatchdog (σ7)",
+    "resultado": "revertida (PrazoNaoExpirado)",
+    "estado": "ENTREGUE",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "B: liberação automática por Δt4",
+    "dia": 15.01,
+    "ator": "prestador",
+    "chamada": "acionarWatchdog (σ7)",
+    "resultado": "ok",
+    "estado": "CONCLUIDO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "1000.0",
+    "eventos": [
+      "WatchdogAcionado",
+      "PagamentoAprovado"
+    ],
+    "gas": "62046"
+  },
+  {
+    "ciclo": "C: inexecução, Δt3 e devolução",
+    "dia": 0,
+    "ator": "contratante",
+    "chamada": "implantação",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "C: inexecução, Δt3 e devolução",
+    "dia": 0.01,
+    "ator": "contratante",
+    "chamada": "approve (fora de Σ)",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "45945"
+  },
+  {
+    "ciclo": "C: inexecução, Δt3 e devolução",
+    "dia": 1,
+    "ator": "prestador",
+    "chamada": "aceitar (σ1)",
+    "resultado": "ok",
+    "estado": "ACEITO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ContratoAceito"
+    ],
+    "gas": "44812"
+  },
+  {
+    "ciclo": "C: inexecução, Δt3 e devolução",
+    "dia": 2,
+    "ator": "contratante",
+    "chamada": "financiar (σ2)",
+    "resultado": "ok",
+    "estado": "FINANCIADO",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ContratoFinanciado"
+    ],
+    "gas": "60575"
+  },
+  {
+    "ciclo": "C: inexecução, Δt3 e devolução",
+    "dia": 3,
+    "ator": "prestador",
+    "chamada": "iniciarExecucao (σ3)",
+    "resultado": "ok",
+    "estado": "EM_EXECUCAO",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ExecucaoIniciada"
+    ],
+    "gas": "27828"
+  },
+  {
+    "ciclo": "C: inexecução, Δt3 e devolução",
+    "dia": 20.01,
+    "ator": "contratante",
+    "chamada": "acionarWatchdog (σ7)",
+    "resultado": "ok",
+    "estado": "EM_DISPUTA",
+    "saldoContrato": "1000.0",
+    "saldoContratante": "0.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "WatchdogAcionado"
+    ],
+    "gas": "30414"
+  },
+  {
+    "ciclo": "C: inexecução, Δt3 e devolução",
+    "dia": 25,
+    "ator": "arbitragem",
+    "chamada": "executarDecisao (σ8, 0)",
+    "resultado": "ok",
+    "estado": "CONCLUIDO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "DisputaResolvida"
+    ],
+    "gas": "58830"
+  },
+  {
+    "ciclo": "D: cancelamento por Δt1",
+    "dia": 0,
+    "ator": "contratante",
+    "chamada": "implantação",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "D: cancelamento por Δt1",
+    "dia": 3.01,
+    "ator": "contratante",
+    "chamada": "acionarWatchdog (σ7)",
+    "resultado": "ok",
+    "estado": "CANCELADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "WatchdogAcionado",
+      "ContratoCancelado"
+    ],
+    "gas": "48082"
+  },
+  {
+    "ciclo": "E: cancelamento por Δt2",
+    "dia": 0,
+    "ator": "contratante",
+    "chamada": "implantação",
+    "resultado": "ok",
+    "estado": "CRIADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [],
+    "gas": "-"
+  },
+  {
+    "ciclo": "E: cancelamento por Δt2",
+    "dia": 1,
+    "ator": "prestador",
+    "chamada": "aceitar (σ1)",
+    "resultado": "ok",
+    "estado": "ACEITO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "ContratoAceito"
+    ],
+    "gas": "44812"
+  },
+  {
+    "ciclo": "E: cancelamento por Δt2",
+    "dia": 6.01,
+    "ator": "prestador",
+    "chamada": "acionarWatchdog (σ7)",
+    "resultado": "ok",
+    "estado": "CANCELADO",
+    "saldoContrato": "0.0",
+    "saldoContratante": "1000.0",
+    "saldoPrestador": "0.0",
+    "eventos": [
+      "WatchdogAcionado",
+      "ContratoCancelado"
+    ],
+    "gas": "31103"
+  }
+]

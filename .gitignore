@@ -1,0 +1,24 @@
+# Dependências
+node_modules
+
+# Segredos: chaves de API, RPC e carteiras (.env, .env.amoy, ...)
+.env
+.env.*
+
+# Saídas geradas pelo Hardhat e pela cobertura
+artifacts
+cache
+typechain-types
+coverage
+coverage.json
+gas-report.txt
+dist
+
+# Python
+__pycache__/
+*.pyc
+
+# Sistema e editores
+.DS_Store
+.vscode/
+.claude/settings.local.json

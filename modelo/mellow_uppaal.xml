@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+<declaration>// MellowProtocol: autômato temporizado M_tau (Capítulo 3) para o UPPAAL 4.1 ou 5.x.
+// Escala de tempo abstrata: os prazos absolutos de P são substituídos por constantes
+// inteiras pequenas que respeitam t0 = 0 &lt; TA &lt; TF &lt; TE. O valor v é abstraído para V = 10;
+// S1 e S2 são lineares em v, e a escolha de V não altera o resultado.
+const int TA    = 3;   // tau_aceite
+const int TF    = 6;   // tau_financ
+const int TE    = 20;  // tau_exec
+const int DI    = 5;   // Delta t_insp
+const int TDISP = 7;   // H1: prazo do árbitro
+const int EPS   = 1;   // H2: latência máxima de inclusão de sigma_7
+const int V     = 10;  // v
+const int TMAX  = TE + DI + TDISP + 2*EPS;  // Equação de T_max com t0 = 0
+</declaration>
+<template>
+<name>Contrato</name>
+<declaration>// Relógios de M_tau: x0 (iniciado em t0, nunca reiniciado) e xent (reiniciado em sigma_4).
+// xd é relógio auxiliar de observação, usado apenas para impor a premissa H1.
+clock x0, xent, xd;
+int B = 0;        // saldo acumulado B(rho) = soma(e_in - e_out)
+int pagoP = 0;    // total transferido a alpha_p
+int pagoC = 0;    // total transferido a alpha_c
+int liq = 0;      // número de liquidações (transições com e_out &gt; 0)
+</declaration>
+<location id="cr"><name>CRIADO</name><label kind="invariant">x0 &lt;= TA + EPS</label></location>
+<location id="ac"><name>ACEITO</name><label kind="invariant">x0 &lt;= TF + EPS</label></location>
+<location id="fi"><name>FINANCIADO</name><label kind="invariant">x0 &lt;= TE + EPS</label></location>
+<location id="ex"><name>EM_EXECUCAO</name><label kind="invariant">x0 &lt;= TE + EPS</label></location>
+<location id="en"><name>ENTREGUE</name><label kind="invariant">xent &lt;= DI + EPS</label></location>
+<location id="di"><name>EM_DISPUTA</name><label kind="invariant">xd &lt;= TDISP</label></location>
+<location id="co"><name>CONCLUIDO</name></location>
+<location id="ca"><name>CANCELADO</name></location>
+<init ref="cr"/>
+<!-- sigma_1: CRIADO -> ACEITO (alpha_p) -->
+<transition><source ref="cr"/><target ref="ac"/><label kind="comments">sigma1</label></transition>
+<!-- sigma_7 / Delta t_1 -->
+<transition><source ref="cr"/><target ref="ca"/><label kind="guard">x0 &gt; TA</label><label kind="comments">sigma7 Dt1</label></transition>
+<!-- sigma_2: entrada de v -->
+<transition><source ref="ac"/><target ref="fi"/><label kind="assignment">B = B + V</label><label kind="comments">sigma2</label></transition>
+<!-- sigma_7 / Delta t_2 -->
+<transition><source ref="ac"/><target ref="ca"/><label kind="guard">x0 &gt; TF</label><label kind="comments">sigma7 Dt2</label></transition>
+<!-- sigma_3 -->
+<transition><source ref="fi"/><target ref="ex"/><label kind="comments">sigma3</label></transition>
+<!-- sigma_7 / Delta t_3 a partir de FINANCIADO -->
+<transition><source ref="fi"/><target ref="di"/><label kind="guard">x0 &gt; TE</label><label kind="assignment">xd = 0</label><label kind="comments">sigma7 Dt3</label></transition>
+<!-- sigma_4: grava tau_ent (reinicia xent) -->
+<transition><source ref="ex"/><target ref="en"/><label kind="assignment">xent = 0</label><label kind="comments">sigma4</label></transition>
+<!-- sigma_7 / Delta t_3 a partir de EM_EXECUCAO -->
+<transition><source ref="ex"/><target ref="di"/><label kind="guard">x0 &gt; TE</label><label kind="assignment">xd = 0</label><label kind="comments">sigma7 Dt3</label></transition>
+<!-- sigma_5: saída de v para alpha_p -->
+<transition><source ref="en"/><target ref="co"/><label kind="assignment">B = B - V, pagoP = pagoP + V, liq = liq + 1</label><label kind="comments">sigma5</label></transition>
+<!-- sigma_6 -->
+<transition><source ref="en"/><target ref="di"/><label kind="assignment">xd = 0</label><label kind="comments">sigma6</label></transition>
+<!-- sigma_7 / Delta t_4: liberação automática -->
+<transition><source ref="en"/><target ref="co"/><label kind="guard">xent &gt; DI</label><label kind="assignment">B = B - V, pagoP = pagoP + V, liq = liq + 1</label><label kind="comments">sigma7 Dt4</label></transition>
+<!-- sigma_8: repartição arbitrária com valor &lt;= v (chamadas com valor &gt; v revertem e não entram em rho) -->
+<transition><source ref="di"/><target ref="co"/><label kind="select">val : int[0,V]</label><label kind="assignment">B = B - V, pagoP = pagoP + val, pagoC = pagoC + (V - val), liq = liq + 1</label><label kind="comments">sigma8</label></transition>
+</template>
+<system>c = Contrato();
+system c;
+</system>
+<queries>
+<query><formula>A[] ((c.FINANCIADO || c.EM_EXECUCAO || c.ENTREGUE || c.EM_DISPUTA) imply c.B == V)</formula><comment>S1, estados de custódia ativa: B = F(s) = v</comment></query>
+<query><formula>A[] ((c.CRIADO || c.ACEITO || c.CONCLUIDO || c.CANCELADO) imply c.B == 0)</formula><comment>S1, demais estados: B = F(s) = 0</comment></query>
+<query><formula>A[] (c.liq &lt;= 1 &amp;&amp; c.pagoP + c.pagoC == V * c.liq)</formula><comment>S2: no máximo uma liquidação, que reparte exatamente v entre alpha_p e alpha_c</comment></query>
+<query><formula>A[] (c.CANCELADO imply (c.pagoP == 0 &amp;&amp; c.pagoC == 0))</formula><comment>Cancelamento sem movimentação de valor</comment></query>
+<query><formula>A&lt;&gt; (c.CONCLUIDO || c.CANCELADO)</formula><comment>L1 (sob H1 e H2 modeladas como invariantes): toda execução alcança um estado absorvente</comment></query>
+<query><formula>A[] ((!c.CONCLUIDO &amp;&amp; !c.CANCELADO) imply c.x0 &lt;= TMAX)</formula><comment>L1 com horizonte: nenhuma execução permanece fora dos absorventes depois de T_max</comment></query>
+<query><formula>E&lt;&gt; (c.EM_DISPUTA &amp;&amp; c.x0 == TMAX)</formula><comment>Esperado: satisfeita. T_max é atingido no pior caso (horizonte justo)</comment></query>
+<query><formula>A[] (deadlock imply (c.CONCLUIDO || c.CANCELADO))</formula><comment>Ausência de bloqueio fora dos estados absorventes</comment></query>
+<query><formula>E&lt;&gt; c.CONCLUIDO &amp;&amp; c.pagoC == V</formula><comment>Esperado: satisfeita. Devolução integral ao contratante é alcançável (sigma8 com valor 0)</comment></query>
+<query><formula>E&lt;&gt; c.CANCELADO</formula><comment>Esperado: satisfeita. Alcançabilidade do cancelamento</comment></query>
+</queries>
+</nta>
